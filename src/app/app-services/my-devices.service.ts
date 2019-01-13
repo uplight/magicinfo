@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthService} from '../apis/auth.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -15,30 +15,32 @@ export class MyDevicesService {
 
   placesholder = '/assets/no-image.jpg';
   serverURL: string;
+
   constructor(
     private userService: AuthService
-  ) { }
+  ) {
+  }
 
-  devices$(){
+  devices$() {
     return this.devicesSub.asObservable().pipe(skip(1));
   }
 
-  start(){
-
+  start() {
     this.loadDevices2();
     setInterval(() => {
       this.loadDevices2();
     }, 10000);
 
   }
+
   getImageURL(url: string) {
     if (!url) return '/assets/off.jpg';
-    return url.indexOf('servlet') == -1 ? this.placesholder : this.userService.baseURL + url;
+    return url.indexOf('servlet') === -1 ? this.placesholder : this.userService.baseURL + url;
   }
 
   loadDevices2() {
     this.userService.getDevices2().then((res: any) => {
-     //  console.log(res);
+      //  console.log(res);
       this.serverURL = res.serverURL;
       const devices = res.items;
       const devicesIndexed = _.keyBy(devices, 'deviceId');

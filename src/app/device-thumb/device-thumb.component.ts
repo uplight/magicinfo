@@ -8,6 +8,7 @@ import {AuthService} from '../apis/auth.service';
   templateUrl: './device-thumb.component.html',
   styleUrls: ['./device-thumb.component.css']
 })
+
 export class DeviceThumbComponent implements OnInit {
   @Input() device: any;
 
@@ -16,15 +17,18 @@ export class DeviceThumbComponent implements OnInit {
 
   myLocation: string;
   capturedDate: string;
+
   constructor(
     private userService: AuthService
   ) {
   }
 
   ngOnInit() {
-    if (!this.device) return;
+    if (!this.device) {
+      return;
+    }
     const out = [];
-    for (let str in this.device) {
+    for (const str in this.device) {
       out.push({
         label: str.split('_').join(' '),
         data: this.device[str].split('_').join(' ')
@@ -32,12 +36,12 @@ export class DeviceThumbComponent implements OnInit {
     }
 
     this.myLocation = this.device.location;
-   //  this.capturedDate = moment(this.device.captured_date).format('HH:mm');
-    //this.deviceProps = out;
+    //  this.capturedDate = moment(this.device.captured_date).format('HH:mm');
+    // this.deviceProps = out;
     this.getThumbnail();
   }
 
-  getThumbnail(){
+  getThumbnail() {
     /*this.userService.getDeviceThumbnail(this.device.device_id).subscribe(res => {
       this.imageURL = res;
     });

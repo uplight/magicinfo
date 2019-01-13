@@ -1,6 +1,7 @@
-import * as express from "express";
+import * as express from 'express';
 // import * as bodyParser from "body-parser";
 import * as request from 'request';
+import {AllDevicesController} from './apps/all-devices-controller';
 const path = require('path');
 // import {getToken} from "./server/com/getToken";
 
@@ -8,6 +9,7 @@ const path = require('path');
 // let querystring = require('querystring');
 // let http = require('http');
 // let fs = require('fs');
+
 const cors = require('cors');
 
 process.on('uncaughtException', function (err) {
@@ -15,20 +17,20 @@ process.on('uncaughtException', function (err) {
 });
 
 
-let app: any = express();
+
+const deviceController = new AllDevicesController();
+
+const app: any = express();
 
 // let parseString = require('xml2js').parseString;
 
-
-const port: number = 49888;
-
-
+const port = 49888;
 // const PLAYERS = require('./server/models/devices');
 // console.log('PLAYERS', PLAYERS);
 
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(bodyParser.urlencoded({extended: true}));
-//app.use(bodyParser.text());
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.text());
 app.use(cors({credentials: true}));
 // app.use("/api", getToken);
 
@@ -54,16 +56,16 @@ function getHeaders(req) {
     'Connection': 'keep-alive',
     'Content-Type': 'application/x-www-form-urlencoded',
     'User-Agent': 'Mozilla/5.0',
-    'X-CSRF-TOKEN': headers['x-csrf-token'],// 'd367ba09-8513-46ad-ae0b-841ec5539428',
+    'X-CSRF-TOKEN': headers['x-csrf-token'], // 'd367ba09-8513-46ad-ae0b-841ec5539428',
     'Cookie': headers['x-cookie'] // 'JSESSIONID=F93734921569418000334530DD946EE1;'
-  }
+  };
 }
 
 
-app.get("/api/proxy/*", function (req: Request, resp: any) {
+app.get('/api/proxy/*', function (req: Request, resp: any) {
   const url = req.url.replace('/api/proxy/', '');
   //  console.log(req.headers);
-  var options = {
+  const options = {
     url: url,
     headers: getHeaders(req)
   };
@@ -71,12 +73,13 @@ app.get("/api/proxy/*", function (req: Request, resp: any) {
   try {
     request(options).pipe(resp);
   } catch (e) {
-    resp.json({error: url})
+    resp.json({error: url});
   }
 
 });
 
-app.post("/api/proxy/*", function (req: any, resp: any) {
+/*
+app.post('/api/proxy/!*', function (req: any, resp: any) {
   let url = req.url.replace('/api/proxy/', '');
   let body = '';
   req.on('data', function (chunk) {
@@ -99,7 +102,8 @@ app.post("/api/proxy/*", function (req: any, resp: any) {
       resp.json({error: url})
     }
   });
-});
+});*/
+
 
 const server = app.listen(port, function (data) {
   console.log('app listening on port ' + port, server.address().address);
