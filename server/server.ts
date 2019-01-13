@@ -2,7 +2,10 @@ import * as express from 'express';
 // import * as bodyParser from "body-parser";
 import * as request from 'request';
 import {AllDevicesController} from './apps/all-devices-controller';
+import {myLoggerInit} from './com/my-logger';
 const path = require('path');
+
+myLoggerInit('magic-info');
 // import {getToken} from "./server/com/getToken";
 
 // let express = require('express');

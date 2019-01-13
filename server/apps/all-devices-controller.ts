@@ -15,13 +15,18 @@ export class AllDevicesController {
       this.auth.login().then((login) => {
         console.log('login ', login);
         if (login === 'loggedin') this.start();
-        else console.error(login);
-      }).catch(console.error);
+        else console.error('login ' + login);
+      }).catch(err => {
+        console.error('this.auth.login', err);
+      });
+    }).catch(err => {
+      console.error(' getConfig ', err);
     });
   }
 
   start() {
     this.tick();
+    setInterval(() => this.tick(), 60 * 1000);
 
   }
 
@@ -31,7 +36,7 @@ export class AllDevicesController {
     try {
       devices = await this.getDevices();
     } catch (e) {
-      console.error(e);
+      console.error('getDevices() ' , e);
     }
 
     if (Array.isArray(devices)) {
@@ -41,7 +46,7 @@ export class AllDevicesController {
         out.push(new DeviceImageController(item, baseUrl));
       });
       this.devicesCtrs = out;
-    } else console.error(devices);
+    } else console.error('getDevices() 2 ', devices);
 
   }
 
