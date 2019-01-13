@@ -1,0 +1,23 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div>
+    <app-login *ngIf="needLogin"></app-login>
+    <div class="center">
+        <h2 class="mat-headline">
+       <span (click)="onNeedLoginClick()">MagicInfo</span>
+   </h2>
+    </div>
+        <div class="card" *ngFor="let device of devices">
+            <mat-card>
+                <img src="{{device.image}}" class="my-image" >
+                <br/>
+                <img src="{{device.thumb}}" class="my-thumb" >
+                <mat-card-content>
+                    <div>{{device.label}}</div>
+                    <div>{{device.date}}</div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+    <!-- <app-device-thumb [device]="device"></app-device-thumb>-->
+</div>
+

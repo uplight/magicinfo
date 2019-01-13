@@ -1,0 +1,17 @@
+<mat-form-field class="w20">
+    <input  matInput placeholder="Base URL" [(ngModel)]="baseURL" type="text">
+</mat-form-field>
+&nbsp; &nbsp;&nbsp;
+<mat-form-field>
+    <input matInput placeholder="Username" [(ngModel)]="username" type="text">
+</mat-form-field>
+&nbsp; &nbsp;&nbsp;
+<mat-form-field>
+    <input matInput placeholder="Password" [(ngModel)]="password" type="password">
+</mat-form-field>
+&nbsp; &nbsp;&nbsp;
+<button mat-button="submit" color="primary" (click)="onSubmitClick()" >Login</button>
+&nbsp; &nbsp;&nbsp;
+<div>{{errorMessage}}</div>;
+
+

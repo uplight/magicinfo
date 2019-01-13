@@ -1,0 +1,8 @@
+{
+  "credentials" :{
+    "session":"JSESSIONID=F93734921569418000334530DD946EE1",
+    "csrf": "d367ba09-8513-46ad-ae0b-841ec5539428",
+    "token":"JGVlNDY2Njc2ZjQ4NDBhNjIkdA=="
+  },
+  "openapiurl":"http://tgag.magicinfo.net:7001/MagicInfo/openapi/open"
+}

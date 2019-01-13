@@ -1,0 +1,5 @@
+{
+  "queryParams":{
+    "devices": {"startIndex": 0, "pageSize": 100}
+  }
+}

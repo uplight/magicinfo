@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+ul, li{
+    list-style: none;
+}
+body{
+    background-color: #e3ebf2;
+}
+
+h2 {
+    display: inline-block;
+}
+
+.txt{
+    text-transform: capitalize;
+}
+
+.center{
+    text-align: center;
+}
+.my-image{
+    max-width: 200px;
+}
+.my-thumb {
+    max-width: 80px;
+}
+.mat-card{
+    float: left;
+    width: 250px;
+    height: 230px;
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px !important;
+    margin: 10px;
+}
+
+.w20{
+    width: 20em;
+}
