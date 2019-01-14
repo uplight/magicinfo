@@ -1,6 +1,5 @@
 import * as moment from 'moment';
 import * as nodemailer from 'nodemailer';
-
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -14,7 +13,7 @@ const transport = nodemailer.createTransport({
     pass: 'XZsawq@!'
   },
   debug: false,
- //  logger: true
+  //  logger: true
 });
 
 let errors: string[] = [];
@@ -42,8 +41,8 @@ let timeout;
 const sendError = function (error: string) {
   errors.push(error);
   clearTimeout(timeout);
-  sendErrorEmail();
   timeout = setTimeout(sendErrorEmail, 60000);
+  if (errors.length > 200) sendErrorEmail();
 };
 
 function appendData(message1: any, message2: any, filename: string) {
