@@ -28,11 +28,8 @@ export class AuthService {
     });
   }
 
-  async login() {
+  async login(username: string, password: string) {
     const config = await this.getConfig();
-    const ar = config.secret.split('.');
-    const username = ar[0];
-    const password = ar[1];
     const uri = this.baseURL + '/auth';
     return axios.post(uri, {username, password}, {responseType: 'json'})
       .then(res => {

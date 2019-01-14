@@ -7,12 +7,12 @@ export class AllDevicesController {
   devicesCtrs: DeviceImageController[];
   private auth: AuthService;
 
-  constructor() {
-
+  constructor(username: string, password: string) {
     this.auth = new AuthService();
     this.auth.getConfig().then(config => {
       //  console.log(config);
-      this.auth.login().then((login) => {
+      this.auth.login(username, password).then((login) => {
+        console.log(login);
         if (login === 'loggedin') this.start();
         else console.error('login ' + login);
       }).catch(err => {
