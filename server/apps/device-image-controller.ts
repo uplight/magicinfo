@@ -1,14 +1,13 @@
 import {VODevice} from './models';
 import * as fs from 'fs';
 import * as path from 'path';
-
 import axios from 'axios';
 
 export class DeviceImageController {
   constructor(private device: VODevice, private baseUrl: string) {
 
     if (device.captureUrl && device.thumbFileUrl) this.downloadImages().then(() => {
-      console.log(' DOWNLOAD DONE ' + device.deviceName);
+      // console.log(' DOWNLOAD DONE ' + device.deviceName);
       this.destroy();
     }).catch(console.error);
   }

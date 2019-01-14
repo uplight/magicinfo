@@ -13,7 +13,6 @@ export class AllDevicesController {
     this.auth.getConfig().then(config => {
       //  console.log(config);
       this.auth.login().then((login) => {
-        console.log('login ', login);
         if (login === 'loggedin') this.start();
         else console.error('login ' + login);
       }).catch(err => {
@@ -36,7 +35,7 @@ export class AllDevicesController {
     try {
       devices = await this.getDevices();
     } catch (e) {
-      console.error('getDevices() ' , e);
+      console.error('getDevices() ' , e.toString());
     }
 
     if (Array.isArray(devices)) {
@@ -46,7 +45,7 @@ export class AllDevicesController {
         out.push(new DeviceImageController(item, baseUrl));
       });
       this.devicesCtrs = out;
-    } else console.error('getDevices() 2 ', devices);
+    } else console.error('getDevices not Array ', devices);
 
   }
 
