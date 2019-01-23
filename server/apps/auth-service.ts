@@ -4,7 +4,7 @@ import {HttpHeaders} from '@angular/common/http';
 import * as fs from 'fs';
 
 export class AuthService {
-  salt = 'my salt';
+  // salt = 'my salt';
   config: any;
   api_key: string;
   baseURL: string;
@@ -21,7 +21,6 @@ export class AuthService {
   private async loadConfig() {
     return new Promise((resolve, reject) => {
       fs.readFile(__dirname + '/config.json', function (err, data) {
-        console.log('loaded', data.toString());
         if (err) reject(err);
         else resolve(JSON.parse(data.toString()));
       });
@@ -33,13 +32,11 @@ export class AuthService {
     const uri = this.baseURL + '/auth';
     return axios.post(uri, {username, password}, {responseType: 'json'})
       .then(res => {
-        //  console.log(typeof  res.data);
         this.api_key = res.data.token;
         if (this.api_key) return 'loggedin';
         throw new Error('login result ' + String(res.data));
       });
   }
-
 
   async get(url: string, params: any) {
     url = this.baseURL + url;

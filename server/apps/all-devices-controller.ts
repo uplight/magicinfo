@@ -26,7 +26,6 @@ export class AllDevicesController {
   start() {
     this.tick();
     setInterval(() => this.tick(), 60 * 1000);
-
   }
 
 
@@ -39,6 +38,7 @@ export class AllDevicesController {
     }
 
     if (Array.isArray(devices)) {
+      console.log(' total devices ' + devices.length);
       const baseUrl = this.auth.baseURL;
       const out: DeviceImageController[] = [];
       devices.forEach(function (item) {

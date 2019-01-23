@@ -16,9 +16,9 @@ myLoggerInit('magic-info');
 
 const cors = require('cors');
 
-process.on('uncaughtException', function (err) {
+/*process.on('uncaughtException', function (err) {
   console.error(' logging uncaughtException', err);
-});
+});*/
 
 
 const app: any = express();
@@ -106,6 +106,12 @@ app.post('/api/proxy/!*', function (req: any, resp: any) {
 });*/
 ///  "AEBAdmin.X0lWCj4wNmTbVrluF0IJ"
 
+
+const server = app.listen(port, function (data) {
+  console.log('app listening on port ' + port, server.address().address);
+});
+
+/*
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -121,4 +127,5 @@ rl.question('username: ', (username) => {
     });
   });
 });
+*/
 

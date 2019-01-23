@@ -1,0 +1,16 @@
+{
+  "apps": [
+    {
+      "name": "app-name",
+      "script": "/usr/local/lib/node_modules/pm2/node_modules/.bin/ts-node",
+      "args":"-r ../node_modules/tsconfig-paths/register ./start.ts",
+      "watch": true,
+      "ignore_watch":["uploads","downloads"],
+      "instances": "4",
+      "exec_mode": "cluster",
+      "env": {
+        "production": true
+      }
+    }
+  ]
+}
