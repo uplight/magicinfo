@@ -3,6 +3,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import axios from 'axios';
 import * as moment from 'moment';
+import {createAttribute} from '@angular/compiler/src/core';
 
 export class DeviceImageController {
   constructor(private device: VODevice, private baseUrl: string) {
@@ -27,21 +28,25 @@ export class DeviceImageController {
         else resolve(folder);
       });
     });
-    // return Promise.resolve(paths.join('/'));
   }
 
   async downloadImages() {
     const thumbURL = this.baseUrl + this.device.thumbFileUrl;
     const captureURL = this.baseUrl + this.device.captureUrl;
     const name = this.device.deviceName;
-    const folder: string = await this.getFolder();
-     console.log(folder);
-    //  console.log(thumbURL, captureURL);
+    let folder: string;
+    try {
+      folder = await this.getFolder();
+    } catch (e) {
+      console.error('create folder ', e);
+    }
+
+    if (!folder) return;
 
     const time = moment().format('HH-mm');
 
-    const filename1 = folder +  '/' + time + '-thumb.png';
-    const filename2 = folder +  '/' + time + '-capture.jpg';
+    const filename1 = folder + '/thumb-' + time + '.png';
+    const filename2 = folder + '/capture-' + time + '.jpg';
     return Promise.all([this.downloadImage(thumbURL, filename1), this.downloadImage(thumbURL, filename2)]);
   }
 
