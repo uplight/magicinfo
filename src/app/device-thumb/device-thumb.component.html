@@ -1,13 +1,9 @@
-<mat-card class="mat-body">
-  <img  src="{{imageURL}}">
-    <mat-card-title>{{myLocation}} {{capturedDate}}</mat-card-title>
-   <!-- <mat-card-content>
-    <ul>
-        <li *ngFor="let prop of deviceProps">
-            <span class="txt">{{prop.label}} : </span>
-            <span class="txt"> {{prop.data}}</span>
-        </li>
-    </ul>
+<mat-card>
+    <img src="{{capture}}" class="my-image" >
+    <br/>
+    <img src="{{thumbnail}}" class="my-thumb" >
+    <mat-card-content>
+        <div>{{device.label}}</div>
+        <div>{{device.date}}</div>
     </mat-card-content>
--->
 </mat-card>

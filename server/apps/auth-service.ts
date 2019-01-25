@@ -1,6 +1,4 @@
 import axios from 'axios';
-
-import {HttpHeaders} from '@angular/common/http';
 import * as fs from 'fs';
 
 export class AuthService {
@@ -38,6 +36,9 @@ export class AuthService {
       });
   }
 
+  getApiKey() {
+    return this.api_key;
+  }
   async get(url: string, params: any) {
     url = this.baseURL + url;
     const api_key = this.api_key;

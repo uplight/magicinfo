@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as querystring from 'querystring';
 
 import {map} from 'rxjs/operators';
+import {Observable, Subscriber} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {map} from 'rxjs/operators';
 export class AuthService {
 
   config: any;
+  token: string;
 
   baseURL: string;
   httpOptions: any;
@@ -21,6 +23,7 @@ export class AuthService {
 
     this.baseURL = localStorage.getItem('baseURL');
     const token = localStorage.getItem('token');
+    this.token = token;
     if (token) {
       this.httpOptions = {
         headers: new HttpHeaders({
@@ -40,6 +43,7 @@ export class AuthService {
       password: password // 'zM0vdNZcyfb11u7YQoQd'
     }).toPromise().then((res: any) => {
       const token = res.token;
+      this.token = token;
       localStorage.setItem('token', token);
       this.httpOptions = {
         headers: new HttpHeaders({
@@ -56,8 +60,9 @@ export class AuthService {
       return res;
     });
   }
-  async getConfig(){
-    if(this.config) return Promise.resolve(this.config);
+
+  async getConfig() {
+    if (this.config) return Promise.resolve(this.config);
     return this.loadConfig();
   }
 
@@ -65,9 +70,49 @@ export class AuthService {
     const options = this.httpOptions;
     if (!options) throw new Error(' token reqired');
     options.params = data;
-    console.log(options);
+   //  console.log(options);
     return this.http.get(this.baseURL + url, options).toPromise().catch(err => {
       console.error(err);
+    });
+  }
+
+
+  getImage(url: string): Observable<any> {
+    const token = this.token;
+   //  console.log(token);
+    const headers = this.getHeaders();
+
+
+
+
+    return new Observable((observer: Subscriber<any>) => {
+     //  let objectUrl: string = null;
+
+
+     //  console.log(headers);
+      this.http
+        .get(url, {
+          headers,
+          responseType: 'blob'
+        })
+        .subscribe(m => {
+          // console.log(m);
+         // objectUrl = URL.createObjectURL(m);
+         // observer.next(objectUrl);
+        });
+
+     /* return () => {
+        if (objectUrl) {
+          URL.revokeObjectURL(objectUrl);
+          objectUrl = null;
+        }
+      };*/
+    });
+  }
+
+  getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      api_key: this.token
     });
   }
 
@@ -81,11 +126,11 @@ export class AuthService {
        });
      });
    }*/
-/*
-  getPaylod(data) {
-    data.token = this.token;
-    return querystring.stringify(data);
-  }*/
+  /*
+    getPaylod(data) {
+      data.token = this.token;
+      return querystring.stringify(data);
+    }*/
 
   /*getHeaders() {
     return new HttpHeaders({
@@ -258,12 +303,14 @@ export class AuthService {
   }
 
 
-  getInfo() {
+  /*getInfo() {
     const url = 'http://tgag.magicinfo.net:7001/MagicInfo/layout/common.htm?cmd=getUserInfo';
     let headers = new HttpHeaders();
-    headers = headers.set('cookie', 'JSESSIONID=CD2A8B3CFD884EA96AC06A3121F6BABD; magicInfoUserId=; MagicInfoPremiumLanguage=en; org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE=en');
+    headers = headers.set('cookie',
+      'JSESSIONID=CD2A8B3CFD884EA96AC06A3121F6BABD; magicInfoUserId=; MagicInfoPremiumLanguage=en;
+      org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE=en');
     return this.http.get(url, {headers: headers});
-  }
+  }*/
 
 
   xmlTextToJson(data) {
@@ -276,7 +323,7 @@ export class AuthService {
   xmlToJson(xml): string | any {
     // Create the return object
 
-    let obj: any = {};
+    const obj: any = {};
     if (xml.nodeType === 1) { // element
       // do attributes
       if (xml.attributes.length > 0) {

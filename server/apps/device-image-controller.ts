@@ -1,12 +1,10 @@
 import {VODevice} from './models';
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
 import * as moment from 'moment';
-import {createAttribute} from '@angular/compiler/src/core';
-
 export class DeviceImageController {
-  constructor(private device: VODevice, private baseUrl: string) {
+  constructor(private device: VODevice, private baseUrl: string, private api_key) {
 
     if (device.captureUrl && device.thumbFileUrl) this.downloadImages().then(() => {
       // console.log(' DOWNLOAD DONE ' + device.deviceName);
@@ -14,7 +12,7 @@ export class DeviceImageController {
     }).catch(console.error);
   }
 
-  async getFolder(): Promise<string> {
+ /* async getFolder(): Promise<string> {
     const now: string[] = moment().format('YY-MMM-DD').split('-');
     const year = 'y' + now[0];
     const month = now[1];
@@ -28,7 +26,7 @@ export class DeviceImageController {
         else resolve(folder);
       });
     });
-  }
+  }*/
 
   async downloadImages() {
     const thumbURL = this.baseUrl + this.device.thumbFileUrl;
@@ -36,18 +34,20 @@ export class DeviceImageController {
     const name = this.device.deviceName;
     let folder: string;
     try {
-      folder = await this.getFolder();
+    //  folder = await this.getFolder();
     } catch (e) {
       console.error('create folder ', e);
     }
 
-    if (!folder) return;
+   // if (!folder) return;
+    folder = './images';
 
     const time = moment().format('HH-mm');
 
-    const filename1 = folder + '/thumb-' + time + '.png';
-    const filename2 = folder + '/capture-' + time + '.jpg';
-    return Promise.all([this.downloadImage(thumbURL, filename1), this.downloadImage(thumbURL, filename2)]);
+    const filename1 = folder + '/thumb-' + name + time + '.png';
+    const filename2 = folder + '/capture-' + name + time + '.jpg';
+    console.log(thumbURL);
+    return Promise.all([this.downloadImage(thumbURL, filename1), this.downloadImage(captureURL, filename2)]);
   }
 
   async downloadImage(url: string, filename: string) {
@@ -56,10 +56,15 @@ export class DeviceImageController {
 
     const writer = fs.createWriteStream(path1);
 
+    const api_key = this.api_key;
     const response = await axios({
       url,
       method: 'GET',
-      responseType: 'stream'
+      responseType: 'stream',
+      headers: {
+        api_key,
+        'User-Agent': 'request'
+      }
     });
 
     //  console.log('downloading ' + url + '   ' + filename);

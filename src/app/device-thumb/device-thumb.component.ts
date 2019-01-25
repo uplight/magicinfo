@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 
 import * as moment from 'moment';
 import {AuthService} from '../apis/auth.service';
+import {VODevice} from '../models/app-models';
 
 @Component({
   selector: 'app-device-thumb',
@@ -10,10 +11,13 @@ import {AuthService} from '../apis/auth.service';
 })
 
 export class DeviceThumbComponent implements OnInit {
-  @Input() device: any;
+  @Input() device: VODevice;
 
   deviceProps: { label: string, data: string }[];
   imageURL: string;
+
+  capture;
+  thumbnail;
 
   myLocation: string;
   capturedDate: string;
@@ -35,13 +39,23 @@ export class DeviceThumbComponent implements OnInit {
       });
     }
 
-    this.myLocation = this.device.location;
+    //  this.myLocation = this.device.location;
+    const thumb = this.device.thumb;
+    const capture = this.device.image;
+
+  //   console.log(thumb);
+   this.userService.getImage(thumb).subscribe(res => {
+      console.log(res);
+    });
+
     //  this.capturedDate = moment(this.device.captured_date).format('HH:mm');
     // this.deviceProps = out;
     this.getThumbnail();
   }
 
   getThumbnail() {
+
+
     /*this.userService.getDeviceThumbnail(this.device.device_id).subscribe(res => {
       this.imageURL = res;
     });

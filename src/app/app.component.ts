@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import {MyDevicesService} from './app-services/my-devices.service';
 import {AuthService} from './apis/auth.service';
+import {VODevice} from './models/app-models';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import {AuthService} from './apis/auth.service';
 export class AppComponent implements OnInit {
   title = 'app';
   currentTime: string;
-  devices: any[];
+  devices: VODevice[];
   needLogin: boolean;
   constructor(
     private devicesService: MyDevicesService
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
     this.devicesService.start();
     this.devicesService.devices$().subscribe(res => {
      // console.log(res);
-      this.devices = res
+      this.devices = res;
     });
   }
   onNeedLoginClick() {
