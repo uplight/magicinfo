@@ -1,5 +1,7 @@
 import {AuthService} from './auth-service';
 import {DeviceImageController} from './device-image-controller';
+import * as fs from 'fs-extra';
+import * as moment from 'moment';
 
 export class AllDevicesController {
   private config: any;
@@ -25,7 +27,7 @@ export class AllDevicesController {
 
   start() {
     this.tick();
-    setInterval(() => this.tick(), 60 * 1000);
+    setInterval(() => this.tick(), 65 * 1000);
   }
 
 
@@ -41,17 +43,23 @@ export class AllDevicesController {
       console.log(' total devices ' + devices.length);
       const baseUrl = this.auth.baseURL;
       const out: DeviceImageController[] = [];
+      const auth = this.auth;
       devices.forEach(function (item) {
-        out.push(new DeviceImageController(item, baseUrl));
+        const ctr = new DeviceImageController(item, baseUrl, auth);
+        item.capture = ctr.capture.replace('./server/public/', '');
+        item.thumb = ctr.thumb.replace('./server/public/', '');
+        out.push(ctr);
       });
       this.devicesCtrs = out;
+      const timestamp = moment().format();
+      fs.writeJSON('./server/public/images/devicesList.json', {timestamp, devices});
     } else console.error('getDevices not Array ', devices);
 
   }
 
   async getDevices() {
     const url = '/restapi/v1.0/rms/devices';
-    const params = {startIndex: 0, pageSize: 100};
+    const params = {startIndex: 0, pageSize: 200};
     return this.auth.get(url, params).then(result => {
       return result.items;
     });

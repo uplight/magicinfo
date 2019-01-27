@@ -1,7 +1,9 @@
 {
   "ver": 1.01,
+  "port": 49888,
   "baseURL":"http://35.182.202.246:7001/MagicInfo",
   "secret":"AEBAdmin.X0lWCj4wNmTbVrluF0IJ",
+  "Cookie":"JSESSIONID=9F51C8AAA72E052D72A34F17FB4A320C",
   "email" : {
     "service": "yahoo",
     "user":"onlinevlad@yahoo.ca",

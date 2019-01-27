@@ -2,13 +2,13 @@ import * as moment from 'moment';
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import * as path from 'path';
+
 const config = require('../apps/config.json');
 
 const email = config.email;
 let transport;
 if (email) {
-   transport = nodemailer.createTransport({
-
+  transport = nodemailer.createTransport({
     // host: 'smtp.mail.yahoo.ca',
     // port: 465,
     // secure: false,
@@ -33,15 +33,15 @@ async function sendErrorEmail() {
     from: email.from, // onlinevlad@yahoo.ca',
     to: email.to, // 'uplight.ca@gmail.com', // list of receivers
     subject: email.subject, // 'ERROR Report',
-    text: errors.toString()
+    text: errors.join('\n\r')
   };
   errors = [];
   // console.log(mailOptions);
   try {
     const info = await transport.sendMail(mailOptions);
-    console.info('email result', info);
+    console.info(' email result', info, ' email result end ');
   } catch (e) {
-    console.warn(' ransport.sendMail   error ', e);
+    console.warn(' transport.sendMail   error ', e);
   }
 }
 
@@ -53,67 +53,51 @@ const sendError = function (error: string) {
   if (errors.length > 200) sendErrorEmail();
 };
 
-function appendData(message1: any, message2: any, filename: string) {
-
-  if (typeof message1 !== 'string') {
-    try {
-      message1 = JSON.stringify(message1);
-    } catch (e) {
-      console.log('appendData message1 ', message1);
-    }
-  }
-  if (message2) {
-    if (typeof message2 !== 'string') {
-      try {
-        message2 = JSON.stringify(message2);
-      } catch (e) {
-        console.log('appendData message2 ', message2);
-      }
-    }
-  } else message2 = '';
+function appendString(message1: string, message2: string, filename: string) {
 
   message1 = ' \n\r ' + new Date().toISOString() + ' \n\r ' + message1 + message2;
   fs.appendFile(filename, message1, 'utf8', (err) => {
-    console.log(filename + '  ' + message1 + '  ' + err);
+    console.log(filename + '  ' + message1 + '   append: ' + err);
   });
 }
 
 
+function toString(obj) {
+  if (typeof obj === 'string') return obj;
+  let out = ' to string ';
+
+  try {
+    if (obj.hasOwnProperty('code')) out = ' code ' + obj['code'];
+    if (obj.hasOwnProperty('config')) out += ' config ' + obj['config']['url'];
+    else out += JSON.stringify(obj);
+
+  } catch (e) {
+    out = e.toString() + ' keys ' + Object.keys(obj);
+    console.log(out);
+    console.log(obj);
+  }
+  return out;
+}
+
 export function myLoggerInit(id: string) {
-  console.error = function (m1, m2) {
-    if (m1 && m1.response)m1 = m1.response.status + ' ' +  m1.response.config.url;
-    if (m2 && m2.Error) m2 = m2.Error;
-    if (typeof m1 !== 'string') {
-      try {
-        m1 = JSON.stringify(m1);
-      } catch (e) {
+  console.error = function (v1, v2) {
 
-        console.log(' console.error   m1 ', Object.keys(m1));
-      }
-    }
-    if (m2) {
-      if (typeof m2 !== 'string') {
-        try {
-          m2 = JSON.stringify(m2);
-        } catch (e) {
-          console.log(' console.error m2 ', m2);
-        }
+    const err1 = v1 ? toString(v1) : '';
+    const err2 = v2 ? toString(v2) : '';
 
-      }
-    } else m2 = '';
-    appendData(m1, m2, 'logs/' + id + '-errors.txt');
-    sendError(m1 + m2);
+    appendString(err1, err2, 'logs/' + id + '-errors.txt');
+    sendError(err1 + ' ' + err2);
   };
 
-  console.warn = function (m1, m2) {
-    if (m1 && m1.Error) m1 = m1.Error;
-    if (m2 && m2.Error) m2 = m2.Error;
-    appendData(m1, m2, 'logs/' + id + '-warns.txt');
+  console.warn = function (v1, v2) {
+    const err1 = v1 ? toString(v1) : '';
+    const err2 = v2 ? toString(v2) : '';
+    appendString(err1.toString(), err1.toString(), 'logs/' + id + '-warns.txt');
   };
 
-  console.info = function (m1, m2) {
-    if (m1 && m1.Error) m1 = m1.Error;
-    if (m2 && m2.Error) m2 = m2.Error;
-    appendData(m1, m2, 'logs/' + id + '-infos.txt');
+  console.info = function (v1, v2) {
+    const err1 = v1 ? toString(v1) : '';
+    const err2 = v2 ? toString(v2) : '';
+    appendString(err1.toString(), err2.toString(), 'logs/' + id + '-infos.txt');
   };
 }

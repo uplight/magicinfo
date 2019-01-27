@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {AuthService} from '../apis/auth.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {skip} from 'rxjs/operators';
+import {BehaviorSubject, noop, Subject} from 'rxjs';
+import {map, skip} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +18,22 @@ export class MyDevicesService {
   serverURL: string;
 
   constructor(
-    private userService: AuthService
+    private userService: AuthService,
+    private http: HttpClient
   ) {
+    //  this.start();
   }
 
   devices$() {
     return this.devicesSub.asObservable().pipe(skip(1));
   }
 
+
   start() {
-    this.loadDevices2();
+    this.getDevices3();
     setInterval(() => {
-      this.loadDevices2();
-    }, 10000);
+      this.getDevices3();
+    }, 1 * 66 * 1000);
 
   }
 
@@ -76,6 +80,15 @@ export class MyDevicesService {
     return moment(+url.substr(index + 1)).format('MM-DD h:mm:ss a');
   }
 
+  getDevices3() {
+    this.http.get('/api/getDevices').pipe(map((res: any) => {
+      const devices = res.devices;
+      this.devicesSub.next(res.devices);
+      //  const devicesIndexed = _.keyBy(devices, 'deviceId');
+      return res.devices;
+    })).subscribe(noop);
+
+  }
 
   async getDevices2() {
     const url = '/restapi/v1.0/rms/devices';

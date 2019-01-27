@@ -39,3 +39,4 @@ testem.log
 Thumbs.db
 /images/
 /logs/
+/server/public/images/

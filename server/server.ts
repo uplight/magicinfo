@@ -5,6 +5,7 @@ import {AllDevicesController} from './apps/all-devices-controller';
 import {myLoggerInit} from './com/my-logger';
 const path = require('path');
 import * as readline from 'readline';
+const config = require(path.join(__dirname, './apps/config.json'));
 
 myLoggerInit('magic-info');
 // import {getToken} from "./server/com/getToken";
@@ -25,7 +26,7 @@ const app: any = express();
 
 // let parseString = require('xml2js').parseString;
 
-const port = 49888;
+const port = config.port;
 // const PLAYERS = require('./server/models/devices');
 // console.log('PLAYERS', PLAYERS);
 
@@ -79,32 +80,10 @@ app.get('/api/proxy/*', function (req: Request, resp: any) {
 
 });
 
-/*
-app.post('/api/proxy/!*', function (req: any, resp: any) {
-  let url = req.url.replace('/api/proxy/', '');
-  let body = '';
-  req.on('data', function (chunk) {
-    body += chunk.toString();
-  });
-
-  req.on('end', function () {
-    //  console.log(body);
-    var options = {
-      url: url,
-      method: 'POST',
-      body: body,
-      headers: getHeaders(req)
-    };
-
-     // console.log(options);
-    try {
-      request(options).pipe(resp);
-    } catch (e) {
-      resp.json({error: url})
-    }
-  });
-});*/
-///  "AEBAdmin.X0lWCj4wNmTbVrluF0IJ"
+app.get('/api/getDevices', function (req: Request, resp: any) {
+  resp.header('Content-Type', 'application/json');
+  resp.sendFile(path.join(__dirname, './public/images/devicesList.json'));
+ });
 
 
 const server = app.listen(port, function (data) {

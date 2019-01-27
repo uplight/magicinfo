@@ -112,7 +112,8 @@ export class AuthService {
 
   getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      api_key: this.token
+      cookie: 'JSESSIONID=63E6C34C33E3CF724F64D157C2A1E7BA; magicInfoUserId=; MagicInfoPremiumLanguage=en;'
+      + 'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE=en; devicePageSizeAEBAdmin=30'
     });
   }
 

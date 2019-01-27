@@ -13,14 +13,16 @@ import {VODevice} from '../models/app-models';
 export class DeviceThumbComponent implements OnInit {
   @Input() device: VODevice;
 
-  deviceProps: { label: string, data: string }[];
-  imageURL: string;
+  placesholder = '/assets/no-image.jpg';
+ //  deviceProps: { label: string, data: string }[];
+ // imageURL: string;
 
   capture;
   thumbnail;
 
-  myLocation: string;
-  capturedDate: string;
+  myName: string;
+  myDate: string;
+ //  capturedDate: string;
 
   constructor(
     private userService: AuthService
@@ -32,23 +34,28 @@ export class DeviceThumbComponent implements OnInit {
       return;
     }
     const out = [];
-    for (const str in this.device) {
+
+   /* for (const str in this.device) {
       out.push({
         label: str.split('_').join(' '),
         data: this.device[str].split('_').join(' ')
       });
-    }
+    }*/
 
     //  this.myLocation = this.device.location;
-    const thumb = this.device.thumb;
-    const capture = this.device.image;
+    const thumb = this.device.capture || this.placesholder;
+    const capture = this.device.thumb || this.placesholder;
+    console.log(capture);
 
+    this.myName = this.device.deviceName.split('_').join(' ')
+    this.capture = capture;
+    this.thumbnail = thumb;
   //   console.log(thumb);
-   this.userService.getImage(thumb).subscribe(res => {
+  /* this.userService.getImage(thumb).subscribe(res => {
       console.log(res);
-    });
+    });*/
 
-    //  this.capturedDate = moment(this.device.captured_date).format('HH:mm');
+    // this.capturedDate = moment(this.device.captured_date).format('HH:mm');
     // this.deviceProps = out;
     this.getThumbnail();
   }

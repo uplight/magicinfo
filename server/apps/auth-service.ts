@@ -16,6 +16,19 @@ export class AuthService {
 
   }
 
+  async getStream(url: string) {
+    const response = await axios({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+      headers: {
+        // api_key,
+        Cookie: this.config.Cookie
+      }
+    });
+    return response;
+  }
+
   private async loadConfig() {
     return new Promise((resolve, reject) => {
       fs.readFile(__dirname + '/config.json', function (err, data) {
@@ -39,6 +52,7 @@ export class AuthService {
   getApiKey() {
     return this.api_key;
   }
+
   async get(url: string, params: any) {
     url = this.baseURL + url;
     const api_key = this.api_key;
@@ -52,7 +66,7 @@ export class AuthService {
         }
       }
     ).then(result => {
-     //  console.log(result);
+      //  console.log(result);
       return result.data;
     });
   }

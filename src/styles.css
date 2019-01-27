@@ -35,7 +35,13 @@ h2 {
     border-radius: 5px !important;
     margin: 10px;
 }
-
+.images{
+    height: 150px;
+    text-align: center;
+}
+.images img{
+    max-height: 100px;
+}
 .w20{
     width: 20em;
 }
