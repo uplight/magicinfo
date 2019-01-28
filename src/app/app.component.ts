@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.devicesService.start();
     this.devicesService.devices$().subscribe(res => {
-     //  console.log(res);
+      // console.log(res);
+
       this.devices = res;
     });
   }

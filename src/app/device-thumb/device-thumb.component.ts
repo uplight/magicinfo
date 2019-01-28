@@ -45,9 +45,9 @@ export class DeviceThumbComponent implements OnInit {
     //  this.myLocation = this.device.location;
     const thumb = this.device.capture || this.placesholder;
     const capture = this.device.thumb || this.placesholder;
-    console.log(capture);
+    // console.log(capture);
 
-    this.myName = this.device.deviceName.split('_').join(' ')
+    this.myName = this.device.deviceName.split('_').join(' ');
     this.capture = capture;
     this.thumbnail = thumb;
   //   console.log(thumb);
