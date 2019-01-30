@@ -7,7 +7,7 @@ import {AuthService} from './auth-service';
 
 export class DeviceImageController {
 
-  imagesFolder = './server/public/images/all';
+  imagesFolder = 'images';
 
   constructor(private device: VODevice, private baseUrl: string, private auth: AuthService) {
 
@@ -18,11 +18,11 @@ export class DeviceImageController {
   }
 
   get thumb() {
-    return this.device.thumbFileUrl ? this.imagesFolder + '/thumb-' + this.device.deviceName + '.png' : '';
+    return this.device.thumbFileUrl ?  'images/all/thumb-' + this.device.deviceName + '.png' : '';
   }
 
   get capture() {
-    return this.device.captureUrl ? this.imagesFolder + '/capture-' + this.device.deviceName + '.jpg' : '';
+    return this.device.captureUrl ? 'images/all/capture-' + this.device.deviceName + '.jpg' : '';
   }
 
   async getFolder(): Promise<string> {
@@ -31,8 +31,8 @@ export class DeviceImageController {
     const month = now[1];
     const day = 'd' + now[2];
     const name = this.device.deviceName;
-    const folders = ['./server/public/images', year, month, day, name];
-    const folder = folders.join('/');
+    const folders = ['../../public/images', year, month, day, name];
+    const folder = path.join(__dirname, folders.join('/'));
     return new Promise<string>((resolve, reject) => {
       fs.ensureDir(folder, (err) => {
         if (err) reject(err);
@@ -49,7 +49,7 @@ export class DeviceImageController {
     try {
       folder = await this.getFolder();
     } catch (e) {
-      console.error('create folder ', e);
+      console.error('error create folder ', e);
     }
 
     //  await fs.emptyDir(imagesFolder);
@@ -59,17 +59,13 @@ export class DeviceImageController {
     }
     const time = moment().format('HH-mm');
 
-    const filename1 = this.thumb;
-    const filename3 = folder + '/thumb-' + name + time + '.png';
-
-    const filename2 = this.capture;
-    const filename4 = folder + '/capture-' + name + time + '.jpg';
-
-    // const stream1 = await this.auth.getStream(captureURL);
-    // const stream2 = await this.auth.getStream(thumbURL);
+    const filename1 = path.join(__dirname, '../../public/' + this.thumb);
+   // console.log(filename1);
+    const filename3 = path.join(folder, '/thumb-' + name + '_' + time + '.png');
 
 
-    // console.log(thumbURL);
+    const filename2 = path.join(__dirname, '../../public/' + this.capture);
+    const filename4 = path.join(folder, '/capture-' + name + '_' + time + '.jpg');
 
     return Promise.all([this.downloadImage(thumbURL, filename1, filename3), this.downloadImage(captureURL, filename2, filename4)]);
   }

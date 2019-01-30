@@ -1,10 +1,10 @@
 import * as express from 'express';
 // import * as bodyParser from "body-parser";
-import * as request from 'request';
+
 import {AllDevicesController} from './apps/all-devices-controller';
 import {myLoggerInit} from './com/my-logger';
 const path = require('path');
-import * as readline from 'readline';
+// import * as readline from 'readline';
 const config = require(path.join(__dirname, './apps/config.json'));
 
 myLoggerInit('magic-info');
@@ -15,7 +15,7 @@ myLoggerInit('magic-info');
 // let http = require('http');
 // let fs = require('fs');
 
-const cors = require('cors');
+// const cors = require('cors');
 
 /*process.on('uncaughtException', function (err) {
   console.error(' logging uncaughtException', err);
@@ -30,10 +30,10 @@ const port = config.port;
 // const PLAYERS = require('./server/models/devices');
 // console.log('PLAYERS', PLAYERS);
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 // app.use(bodyParser.urlencoded({extended: true}));
 // app.use(bodyParser.text());
-app.use(cors({credentials: true}));
+// app.use(cors({credentials: true}));
 // app.use("/api", getToken);
 
 // initApi(app);
@@ -64,25 +64,10 @@ function getHeaders(req) {
 }
 
 
-app.get('/api/proxy/*', function (req: Request, resp: any) {
-  const url = req.url.replace('/api/proxy/', '');
-  //  console.log(req.headers);
-  const options = {
-    url: url,
-    headers: getHeaders(req)
-  };
-
-  try {
-    request(options).pipe(resp);
-  } catch (e) {
-    resp.json({error: url});
-  }
-
-});
 
 app.get('/api/getDevices', function (req: Request, resp: any) {
   resp.header('Content-Type', 'application/json');
-  resp.sendFile(path.join(__dirname, './public/images/devicesList.json'));
+  resp.sendFile(path.join(__dirname, '../public/images/devicesList.json'));
  });
 
 

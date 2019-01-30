@@ -10,9 +10,10 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class MyDevicesService {
-  _devices: any[];
+ //  _devices: any[];
 
   private devicesSub: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  private timestampSub: BehaviorSubject<string> = new BehaviorSubject('');
 
   placesholder = '/assets/no-image.jpg';
   serverURL: string;
@@ -26,6 +27,10 @@ export class MyDevicesService {
 
   devices$() {
     return this.devicesSub.asObservable().pipe(skip(1));
+  }
+
+  timestamp$() {
+    return this.timestampSub.asObservable();
   }
 
 
@@ -42,7 +47,7 @@ export class MyDevicesService {
     return url.indexOf('servlet') === -1 ? this.placesholder : this.userService.baseURL + url;
   }
 
-  loadDevices2() {
+ /* loadDevices2() {
     this.userService.getDevices2().then((res: any) => {
       //  console.log(res);
       this.serverURL = res.serverURL;
@@ -73,7 +78,7 @@ export class MyDevicesService {
       this.devicesSub.next(this._devices);
     });
   }
-
+*/
   imageTodate(url: string) {
     if (!url) return '';
     const index = url.lastIndexOf('&');
@@ -83,7 +88,10 @@ export class MyDevicesService {
   getDevices3() {
     this.http.get('/api/getDevices').pipe(map((res: any) => {
       const devices = res.devices;
+      const time = moment(res.timestamp).format('DD HH:mm');
+      this.timestampSub.next(time);
       this.devicesSub.next(res.devices);
+
       //  const devicesIndexed = _.keyBy(devices, 'deviceId');
       return res.devices;
     })).subscribe(noop);

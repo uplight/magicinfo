@@ -5,6 +5,7 @@
         <h2 class="mat-headline">
        <span (click)="onNeedLoginClick()">MagicInfo</span>
    </h2>
+        <h4>{{currentTime$ | async}}</h4>
     </div>
         <div class="card" *ngFor="let device of devices">
             <app-device-thumb [device]="device"></app-device-thumb>

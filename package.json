@@ -5,8 +5,8 @@
     "ng": "ng",
     "start": "ng serve --port 4202 --proxy-config proxy.conf.json",
     "build": "ng build --prod",
-    "server": "ts-node ./server/server.ts",
-    "fileSave": "ts-node ./server/apps/main.ts",
+    "server": "ts-node ./src_server/server.ts",
+    "fileSave": "ts-node ./src_server/apps/main.ts",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

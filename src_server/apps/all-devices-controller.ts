@@ -2,6 +2,7 @@ import {AuthService} from './auth-service';
 import {DeviceImageController} from './device-image-controller';
 import * as fs from 'fs-extra';
 import * as moment from 'moment';
+import * as path from 'path';
 
 export class AllDevicesController {
   private config: any;
@@ -9,7 +10,7 @@ export class AllDevicesController {
   devicesCtrs: DeviceImageController[];
   private auth: AuthService;
 
-  constructor(username: string, password: string) {
+  constructor(private username: string, private password: string) {
     this.auth = new AuthService();
     this.auth.getConfig().then(config => {
       //  console.log(config);
@@ -36,7 +37,12 @@ export class AllDevicesController {
     try {
       devices = await this.getDevices();
     } catch (e) {
-      console.error('getDevices() ' , e.toString());
+
+      this.auth.login(this.username, this.password).then(loggedin => {
+        console.info(' re login ' + loggedin);
+        if (loggedin === 'loggedin') this.tick();
+      });
+      console.error(' getDevices() ', e.toString());
     }
 
     if (Array.isArray(devices)) {
@@ -46,14 +52,16 @@ export class AllDevicesController {
       const auth = this.auth;
       devices.forEach(function (item) {
         const ctr = new DeviceImageController(item, baseUrl, auth);
-        item.capture = ctr.capture.replace('./server/public/', '');
-        item.thumb = ctr.thumb.replace('./server/public/', '');
+        item.capture = ctr.capture.replace('./public/', '');
+        item.thumb = ctr.thumb.replace('./public/', '');
         out.push(ctr);
       });
       this.devicesCtrs = out;
       const timestamp = moment().format();
-      fs.writeJSON('./server/public/images/devicesList.json', {timestamp, devices});
-    } else console.error('getDevices not Array ', devices);
+
+      fs.writeJSON(path.join(__dirname, '../../public/images/devicesList.json'), {timestamp, devices})
+        .catch(console.error);
+    } else console.error(' getDevices not Array ', devices);
 
   }
 
