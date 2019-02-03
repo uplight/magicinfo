@@ -39,7 +39,8 @@ class AllDevicesController {
                 if (loggedin === 'loggedin')
                     this.tick();
             });
-            console.error(' getDevices() ', e.toString());
+            console.info(' getDevices() ', e.toString());
+            return;
         }
         if (Array.isArray(devices)) {
             console.log(' total devices ' + devices.length);

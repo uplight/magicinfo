@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2017",
-    "outDir": "../server",
+    "outDir": "../build/server",
     "sourceMap": false,
     "removeComments": true
   },
