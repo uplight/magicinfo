@@ -94,7 +94,7 @@ export class DeviceImageController {
               }).catch(reject);
           } else reject(' file zero ' + path1);
 
-        }, 50);
+        }, 250);
 
       });
       writer.on('error', reject);

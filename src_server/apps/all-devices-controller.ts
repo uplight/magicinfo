@@ -20,7 +20,7 @@ export class AllDevicesController {
     try {
       login = await this.auth.login();
     } catch (e) {
-      console.error(' cant login ' + JSON.stringify(e));
+      console.error(' cant login ' + e.toString());
     }
 
     return login;
@@ -29,7 +29,7 @@ export class AllDevicesController {
   async start() {
     console.log(' start ');
     const login = await this.login();
-   console.log('login ', login);
+    console.log('login ', login);
     if (login) {
       this.tick();
       setInterval(() => this.tick(), 65 * 1000);
@@ -42,9 +42,11 @@ export class AllDevicesController {
     try {
       devices = await this.getDevices();
     } catch (e) {
-      console.warn(' error devices ' + JSON.stringify(e));
+      console.warn(' error devices ' + e.toString());
+    }
+    if (!devices) {
       const login = await this.login();
-      if (login) this.tick();
+      if (login) setTimeout(() => this.tick(), 20000);
       return;
     }
 

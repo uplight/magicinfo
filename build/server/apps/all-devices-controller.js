@@ -16,7 +16,7 @@ class AllDevicesController {
             login = await this.auth.login();
         }
         catch (e) {
-            console.error(' cant login ' + JSON.stringify(e));
+            console.error(' cant login ' + e.toString());
         }
         return login;
     }
@@ -35,10 +35,12 @@ class AllDevicesController {
             devices = await this.getDevices();
         }
         catch (e) {
-            console.warn(' error devices ' + JSON.stringify(e));
+            console.warn(' error devices ' + e.toString());
+        }
+        if (!devices) {
             const login = await this.login();
             if (login)
-                this.tick();
+                setTimeout(() => this.tick(), 20000);
             return;
         }
         if (Array.isArray(devices)) {
