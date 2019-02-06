@@ -10,41 +10,44 @@ export class AllDevicesController {
   devicesCtrs: DeviceImageController[];
   private auth: AuthService;
 
-  constructor(private username: string, private password: string) {
-    this.auth = new AuthService();
-    this.auth.getConfig().then(config => {
-      //  console.log(config);
-      this.auth.login(username, password).then((login) => {
-        console.log(login);
-        if (login === 'loggedin') this.start();
-        else console.error('login ' + login);
-      }).catch(err => {
-        console.error('this.auth.login', err);
-      });
-    }).catch(err => {
-      console.error(' getConfig ', err);
-    });
+  constructor(username: string, password: string) {
+    this.auth = new AuthService(username, password);
+    this.start();
   }
 
-  start() {
-    this.tick();
-    setInterval(() => this.tick(), 65 * 1000);
+  async login() {
+    let login;
+    try {
+      login = await this.auth.login();
+    } catch (e) {
+      console.error(' cant login ' + JSON.stringify(e));
+    }
+
+    return login;
   }
 
+  async start() {
+    console.log(' start ');
+    const login = await this.login();
+   console.log('login ', login);
+    if (login) {
+      this.tick();
+      setInterval(() => this.tick(), 65 * 1000);
+    }
+
+  }
 
   async tick() {
     let devices: any[];
     try {
       devices = await this.getDevices();
     } catch (e) {
-
-      this.auth.login(this.username, this.password).then(loggedin => {
-        console.info(' re login ' + loggedin);
-        if (loggedin === 'loggedin') this.tick();
-      });
-      console.info(' getDevices() ', e.toString());
+      console.warn(' error devices ' + JSON.stringify(e));
+      const login = await this.login();
+      if (login) this.tick();
       return;
     }
+
 
     if (Array.isArray(devices)) {
       console.log(' total devices ' + devices.length);

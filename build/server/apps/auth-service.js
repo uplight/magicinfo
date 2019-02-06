@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = require("axios");
 const fs = require("fs");
 class AuthService {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
     async getConfig() {
         if (this.config)
             return Promise.resolve(this.config);
@@ -31,12 +35,15 @@ class AuthService {
             });
         });
     }
-    async login(username, password) {
+    async login() {
+        const username = this.username;
+        const password = this.password;
         const config = await this.getConfig();
         const uri = this.baseURL + '/auth';
         return axios_1.default.post(uri, { username, password }, { responseType: 'json' })
             .then(res => {
             this.api_key = res.data.token;
+            console.log(this.api_key);
             if (this.api_key)
                 return 'loggedin';
             throw new Error('login result ' + String(res.data));

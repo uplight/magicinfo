@@ -7,6 +7,9 @@ export class AuthService {
   api_key: string;
   baseURL: string;
 
+  constructor(private username: string, private password: string) {
+
+  }
 
   async getConfig() {
     if (this.config) return Promise.resolve(this.config);
@@ -38,12 +41,18 @@ export class AuthService {
     });
   }
 
-  async login(username: string, password: string) {
+  async login() {
+    const username = this.username;
+    const password = this.password;
     const config = await this.getConfig();
     const uri = this.baseURL + '/auth';
+
+    // console.log(' call login');
+
     return axios.post(uri, {username, password}, {responseType: 'json'})
       .then(res => {
         this.api_key = res.data.token;
+        console.log(this.api_key);
         if (this.api_key) return 'loggedin';
         throw new Error('login result ' + String(res.data));
       });

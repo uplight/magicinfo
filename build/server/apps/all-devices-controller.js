@@ -7,26 +7,27 @@ const moment = require("moment");
 const path = require("path");
 class AllDevicesController {
     constructor(username, password) {
-        this.username = username;
-        this.password = password;
-        this.auth = new auth_service_1.AuthService();
-        this.auth.getConfig().then(config => {
-            this.auth.login(username, password).then((login) => {
-                console.log(login);
-                if (login === 'loggedin')
-                    this.start();
-                else
-                    console.error('login ' + login);
-            }).catch(err => {
-                console.error('this.auth.login', err);
-            });
-        }).catch(err => {
-            console.error(' getConfig ', err);
-        });
+        this.auth = new auth_service_1.AuthService(username, password);
+        this.start();
     }
-    start() {
-        this.tick();
-        setInterval(() => this.tick(), 65 * 1000);
+    async login() {
+        let login;
+        try {
+            login = await this.auth.login();
+        }
+        catch (e) {
+            console.error(' cant login ' + JSON.stringify(e));
+        }
+        return login;
+    }
+    async start() {
+        console.log(' start ');
+        const login = await this.login();
+        console.log('login ', login);
+        if (login) {
+            this.tick();
+            setInterval(() => this.tick(), 65 * 1000);
+        }
     }
     async tick() {
         let devices;
@@ -34,12 +35,10 @@ class AllDevicesController {
             devices = await this.getDevices();
         }
         catch (e) {
-            this.auth.login(this.username, this.password).then(loggedin => {
-                console.info(' re login ' + loggedin);
-                if (loggedin === 'loggedin')
-                    this.tick();
-            });
-            console.info(' getDevices() ', e.toString());
+            console.warn(' error devices ' + JSON.stringify(e));
+            const login = await this.login();
+            if (login)
+                this.tick();
             return;
         }
         if (Array.isArray(devices)) {
