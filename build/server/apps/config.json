@@ -1,0 +1,16 @@
+{
+  "ver": 1.01,
+  "port": 49888,
+  "baseURL":"http://35.182.202.246:7001/MagicInfo",
+  "secret":"AEBAdmin.X0lWCj4wNmTbVrluF0IJ",
+  "Cookie":"JSESSIONID=2DB156E8541442463EB117420635E25B",
+  "email" : {
+    "service": "yahoo",
+    "user":"onlinevlad@yahoo.ca",
+    "pass":"XZsawq@!",
+    "from":"onlinevlad@yahoo.ca",
+    "to":"uplight.ca@gmail.com",
+    "subject":"Error Report"
+
+  }
+}

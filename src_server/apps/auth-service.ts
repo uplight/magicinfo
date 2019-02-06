@@ -52,7 +52,6 @@ export class AuthService {
     return axios.post(uri, {username, password}, {responseType: 'json'})
       .then(res => {
         this.api_key = res.data.token;
-        console.log(this.api_key);
         if (this.api_key) return 'loggedin';
         throw new Error('login result ' + String(res.data));
       });
